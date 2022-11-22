@@ -33,7 +33,65 @@ $siteng-copy-theme: mat.define-light-theme((
 // that you are using.
 @include mat.all-component-themes($siteng-copy-theme);
 
-/* You can add global styles to this file, and also import other style files */
+@use './styles/colors';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global styles */
+html, body { height: 100%;}
+body { margin: 0; font-family: Montserrat, sans-serif;}
+hr { margin: 2rem 0; border-color: rgba(0,0,0,.12); width: 100%; }
+strong {font-weight: 500}
+pre { font-family: Montserrat, sans-serif }
+
+@font-face {
+  font-family: 'Material Icons';
+  font-display: block;
+}
+
+.link-primary, .link-accent {
+  color: colors.$primary;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &.link-accent {
+    color: colors.$accent;
+  }
+}
+
+.link-animated {
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100%;
+  background-size: 0 2px;
+  padding-bottom: 2px;
+  transition: .3s;
+
+  &:hover {
+    text-decoration: none;
+    background-size: 100% 2px;
+  }
+}
+
+mat-checkbox span {
+  white-space: normal;
+}
+
+// adocean sticky mobile offset "hack"
+body.banner-sticky-mobile-offset > div[id^="billboard"] {
+  bottom: 72px !important;
+  z-index: 2;
+  transition: bottom 300ms ease-in-out;
+}
+
+body.body-scroll-fix {
+  overflow: hidden !important;
+  width: 100%;
+}
+
