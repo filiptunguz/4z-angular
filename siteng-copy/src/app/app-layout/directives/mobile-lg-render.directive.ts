@@ -4,7 +4,7 @@ import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 
 @UntilDestroy()
 @Directive({
-  selector: '[appMobileLgRender]',
+  selector: '[appDesktopLgRender]',
   standalone: true,
 })
 export class MobileLgRenderDirective {
