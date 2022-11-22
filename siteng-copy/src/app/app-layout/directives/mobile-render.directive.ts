@@ -27,7 +27,6 @@ export class MobileRenderDirective {
     if (condition && !this.visible) {
       this.viewContainer.createEmbeddedView(this.templateRef);
       this.visible = true;
-      this.changeDetectorRef.markForCheck();
     } else if (!condition && this.visible) {
       this.viewContainer.clear();
       this.visible = false;
