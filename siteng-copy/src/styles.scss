@@ -1,3 +1,4 @@
+@use './styles/colors';
 
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
@@ -32,8 +33,6 @@ $siteng-copy-theme: mat.define-light-theme((
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($siteng-copy-theme);
-
-@use './styles/colors';
 
 /* Tailwind CSS */
 @tailwind base;
