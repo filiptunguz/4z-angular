@@ -7,7 +7,7 @@ import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
   selector: '[appDesktopRender]',
   standalone: true,
 })
-export class MobileLgRenderDirective {
+export class DesktopRenderDirective {
   platformService = inject(PlatformService);
   templateRef = inject(TemplateRef<any>);
   viewContainer = inject(ViewContainerRef);
