@@ -35,6 +35,7 @@
     "@rx-angular/cdk": "^1.0.0-rc.3",
     "@rx-angular/state": "^1.4.6",
     "@rx-angular/template": "^1.0.0-rc.4",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "express": "^4.15.2",
     "ngx-cookie": "^6.0.1",
     "node-cache": "^5.1.2",
