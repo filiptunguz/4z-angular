@@ -31,6 +31,7 @@
     "@ng-web-apis/common": "^2.1.0",
     "@ngneat/until-destroy": "^9.2.2",
     "@nguniversal/express-engine": "^14.2.2",
+    "@rx-angular/state": "^1.4.6",
     "express": "^4.15.2",
     "ngx-cookie": "^6.0.1",
     "rxjs": "~7.4.0",
