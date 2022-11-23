@@ -30,6 +30,7 @@
     "@angular/router": "^14.2.12",
     "@ngneat/until-destroy": "^9.2.2",
     "@nguniversal/express-engine": "^14.2.2",
+    "angular-uuid": "^0.0.4",
     "express": "^4.15.2",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
