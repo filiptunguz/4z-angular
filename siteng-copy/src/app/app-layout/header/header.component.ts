@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject} from '@angular/core';
 import {MobileNavigationComponent} from "./mobile-navigation/mobile-navigation.component";
 import {DesktopNavigationComponent} from "./desktop-navigation/desktop-navigation.component";
 import {MobileLgRenderDirective} from "../directives/mobile-lg-render.directive";
@@ -17,11 +17,10 @@ import {DesktopLgRenderDirective} from "../directives/desktop-lg-render.directiv
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements AfterViewInit {
+  changeDetectorRef = inject(ChangeDetectorRef);
 
-  constructor() { }
-
-  ngOnInit(): void {
+  ngAfterViewInit() {
+    // this.changeDetectorRef.detach();
   }
-
 }

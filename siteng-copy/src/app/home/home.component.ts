@@ -9,4 +9,8 @@ import {HeaderComponent} from "../app-layout/header/header.component";
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent {}
+export class HomeComponent {
+  ok() {
+    console.count('Home - CD');
+  }
+}
