@@ -1,4 +1,46 @@
 <ng-container *rxLet="user$; let user">
-  <pre>{{ user | json }}</pre>
+  <mat-toolbar class="sidenav-header mat-elevation-z1">
+    <button mat-icon-button (click)="showMainSidenav('Hamburger')">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <a routerLink="/" (click)="closeSidenav()">
+      <img
+        ngSrc="{{ '/assets/images/logos/deo-inspira-grupe.png' | cdn }}"
+        alt="4zida.rs - deo Inspira grupe - Logo"
+        width="179"
+        height="49" />
+    </a>
+    <span
+      *ngIf="user; else login"
+      class="shadow-lg rounded-full overflow-hidden"
+      data-cy="userAvatarMobile"
+      (click)="showProfileSidenav()">
+      <picture *ngIf="user.hasAvatar(); else noAvatar">
+        <source type="image/webp" [srcset]="user.resolveAvatarUrl(40, 40, 'fill', 'webp')" />
+        <source type="image/jpeg" [srcset]="user.resolveAvatarUrl(40, 40, 'fill', 'jpeg')" />
+        <img
+          [ngSrc]="user.resolveAvatarUrl(40, 40, 'fill', 'webp') ?? ''"
+          alt="User avatar"
+          class="rounded-full"
+          width="40"
+          height="40"
+          data-cy="userAvatar"
+          priority />
+      </picture>
+      <ng-template #noAvatar>
+        <img
+          ngSrc="{{ '/assets/images/no-images/no-user-avatar.png' | cdn }}"
+          alt="anonymous user"
+          width="40"
+          height="40"
+          priority />
+      </ng-template>
+    </span>
+    <ng-template #login>
+<!--      <button id="btnAuthMobile" mat-icon-button (click)="openAuthDialog()" data-cy="btnAuthMobile">-->
+      <button id="btnAuthMobile" mat-icon-button data-cy="btnAuthMobile">
+        <mat-icon>login</mat-icon>
+      </button>
+    </ng-template>
+  </mat-toolbar>
 </ng-container>
-<p>mobile-navigation works!</p>
