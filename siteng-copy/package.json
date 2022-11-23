@@ -29,6 +29,7 @@
     "@angular/platform-server": "^14.2.12",
     "@angular/router": "^14.2.12",
     "@ng-web-apis/common": "^2.1.0",
+    "@ng-web-apis/universal": "^2.0.0",
     "@ngneat/until-destroy": "^9.2.2",
     "@nguniversal/express-engine": "^14.2.2",
     "@rx-angular/state": "^1.4.6",
