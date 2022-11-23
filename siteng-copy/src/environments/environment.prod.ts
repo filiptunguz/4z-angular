@@ -3,4 +3,5 @@ export const environment = {
   baseUrl: 'https://api.4zida.rs/v6',
   cookieDomain: '4zida.rs',
   production: true,
+  cdnUrl: 'https://cdn.4zida.rs',
 };
