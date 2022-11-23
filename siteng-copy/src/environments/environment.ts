@@ -4,7 +4,9 @@
 
 export const environment = {
   apiClientKey: 'Pg8R7bkOwyNMp7dRx3jT',
-  production: false
+  baseUrl: 'https://api.4zida.rs/v6',
+  production: false,
+  cookieDomain: '4zida.rs', // If your local env is on another domain, change it to allow setting cookies ("4zida.rs" for example)
 };
 
 /*

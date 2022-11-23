@@ -1,0 +1,8 @@
+<h4 class="!text-xl !font-bold">{{message.title}}</h4>
+<p>{{message.text}}</p>
+<div class="flex flex-wrap-reverse gap-2 justify-end">
+  <button mat-button (click)="close()">Zatvori</button>
+  <button mat-flat-button color="accent" (click)="action()">
+    <div class="truncate w-full">{{message.actionText}}</div>
+  </button>
+</div>
