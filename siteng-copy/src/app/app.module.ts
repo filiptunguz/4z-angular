@@ -24,13 +24,13 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: () => () => {},
-      deps: [AuthService],
+      useFactory: () => () => new Promise(resolve => setTimeout(resolve)),
       multi: true,
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: () => () => new Promise(resolve => setTimeout(resolve)),
+      useFactory: () => () => {},
+      deps: [AuthService],
       multi: true,
     },
   ],

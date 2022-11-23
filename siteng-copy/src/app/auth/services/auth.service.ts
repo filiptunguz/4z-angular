@@ -9,6 +9,16 @@ import {StateService} from "../../shared/services/state.service";
 
 export const SEND_CREDENTIALS = new HttpContextToken(() => false);
 
+/**
+ * This interface is implemented in SSR too
+ * so its methods are safe to be called without isPlatformServer
+ */
+export interface AuthInterface {
+  // user$: Observable<User | null>;
+
+  logOut(): void;
+}
+
 @Injectable({
   providedIn: 'root',
 })

@@ -1,5 +1,5 @@
-import { inject, Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie';
+import {inject, Injectable} from '@angular/core';
+import {CookieService} from 'ngx-cookie';
 
 /**
  * This interface is implemented in SSR too
@@ -28,7 +28,7 @@ export interface CredentialsStorageInterface {
 @Injectable({
   providedIn: 'root',
 })
-export class CredentialsStorageService implements CredentialsStorageInterface {
+export class CredentialsStorageService {
   private static readonly API_KEY_LABEL = 'user-api-key';
   // private static readonly IMPERSONATED_EMAIL_LABEL = 'impersonated-user-email';
   // private static readonly DEVICE_ID_LABEL = 'device-id';
