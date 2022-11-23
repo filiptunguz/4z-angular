@@ -5,6 +5,7 @@ import {map, tap} from "rxjs";
 import {User} from "../me.context";
 import {environment} from "../../../environments/environment";
 import {NotifierService} from "../../misc/notifier/notifier.service";
+import {StateService} from "../../shared/services/state.service";
 
 export const SEND_CREDENTIALS = new HttpContextToken(() => false);
 
@@ -15,8 +16,11 @@ export class AuthService {
   credentialsStorage = inject(CredentialsStorageService);
   http = inject(HttpClient);
   notifier = inject(NotifierService);
+  stateService = inject(StateService);
 
   private static readonly BASE_URL = environment.baseUrl;
+
+  user$ = this.stateService.user$;
 
   loadUserFromApiKey(): void {
     if (this.credentialsStorage.hasApiKey()) {
@@ -30,8 +34,7 @@ export class AuthService {
           })
           // tap((user: User) => Sentry.setUser({email: user.email}))
         )
-        // .subscribe(user => this.stateService.setUser(user));
-        .subscribe(console.log);
+        .subscribe(user => this.stateService.setUser(user));
     }
   }
 }
