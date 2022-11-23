@@ -43,4 +43,143 @@
       </button>
     </ng-template>
   </mat-toolbar>
+
+  <section
+    *ngIf="activeSidenav >= Sidenav.main"
+    class="sidenav"
+    [@sidenavAnimationLeft]="activeSidenav">
+    <mat-toolbar class="sidenav-header mat-elevation-z1">
+      <a routerLink="/" (click)="closeSidenav('Home')">
+        <img
+          ngSrc="{{ '/assets/images/logos/deo-inspira-grupe.png' | cdn }}"
+          alt="4zida.rs - deo Inspira grupe - logo"
+          width="179"
+          height="49" />
+      </a>
+      <button
+        *rxLet="
+          activeSidenav === Sidenav.main ? 'HamburgerZatvori' : 'ZaglavljeZatvori' as gtagLabel
+        "
+        mat-icon-button
+        (click)="closeSidenav(gtagLabel)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <div class="p-4">
+      <div (click)="setActiveSidenav(Sidenav.sale)" class="sidenav-navigator">
+        <span>Prodaja</span>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </div>
+      <div (click)="setActiveSidenav(Sidenav.rent)" class="sidenav-navigator">
+        <span>Izdavanje</span>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </div>
+      <div (click)="setActiveSidenav(Sidenav.newBuilding)" class="sidenav-navigator">
+        <span>Novogradnja</span>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </div>
+      <div (click)="setActiveSidenav(Sidenav.advertisement)" class="sidenav-navigator">
+        <span>Oglašavanje</span>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </div>
+      <a href="https://4zida.rs/blog/">
+        <div class="sidenav-navigator">
+          <span> Blog </span>
+        </div>
+      </a>
+    </div>
+
+    <div class="uppercase p-4">Izdvajamo</div>
+    <section class="distinguished-container p-4">
+      <a
+        *rxLet="'Pitaj pravnika' as linkTitle"
+        href="https://www.4zida.rs/blog/pitaj-pravnika/"
+        (click)="sendEvent('clickPromo', linkTitle)">
+        <div class="distinguished-link mat-elevation-z0">
+          <mat-icon
+            fontSet="material-icons-outlined"
+            color="accent"
+            svgIcon="pitaj-pravnika"></mat-icon>
+          <span>{{ linkTitle }}</span>
+        </div>
+      </a>
+      <a
+        *rxLet="'Kretanje cena kvadrata u Srbiji' as linkTitle"
+        href="https://4zida.rs/kretanje-cene-nekretnina"
+        (click)="sendEvent('clickPromo', linkTitle)">
+        <div class="distinguished-link mat-elevation-z0">
+          <mat-icon fontSet="material-icons-outlined" color="accent">query_stats</mat-icon>
+          <span>{{ linkTitle }}</span>
+        </div>
+      </a>
+      <a
+        *rxLet="'Procena vrednosti nekretnine' as linkTitle"
+        routerLink="/procena-vrednosti-nekretnine"
+        (click)="sendEvent('clickPromo', linkTitle); closeSidenav()">
+        <div class="distinguished-link mat-elevation-z0">
+          <mat-icon fontSet="material-icons-outlined" color="accent">calculate</mat-icon>
+          <span>{{ linkTitle }}</span>
+        </div>
+      </a>
+      <a
+        *rxLet="'Opremanje nekretnine nameštajem i tehnikom' as linkTitle"
+        href="https://4zida.rs/opremanje-namestajem-i-tehnikom"
+        (click)="sendEvent('clickPromo', linkTitle)">
+        <div class="distinguished-link mat-elevation-z0">
+          <mat-icon fontSet="material-icons-outlined" color="accent">chair</mat-icon>
+          <span>{{ linkTitle }}</span>
+        </div>
+      </a>
+      <a
+        *rxLet="'Isplativost: kupovina ili iznajmljivanje?' as linkTitle"
+        routerLink="/isplativost-kupovina-ili-iznajmljivanje"
+        (click)="closeSidenav(linkTitle, 'clickPromo')">
+        <div class="distinguished-link mat-elevation-z0">
+          <mat-icon fontSet="material-icons-outlined" color="accent">question_mark</mat-icon>
+          <span>{{ linkTitle }}</span>
+        </div>
+      </a>
+      <a
+        *rxLet="'Kalkulator kredita i osiguranja' as linkTitle"
+        href="https://4zida.rs/kalkulator-stambenih-kredita-i-osiguranja"
+        (click)="sendEvent('clickPromo', linkTitle)">
+        <div class="distinguished-link mat-elevation-z0">
+          <mat-icon fontSet="material-icons-outlined" color="accent">savings</mat-icon>
+          <span>{{ linkTitle }}</span>
+        </div>
+      </a>
+      <a
+        *rxLet="'Vodiči' as linkTitle"
+        href="https://www.4zida.rs/blog/4zida-vodici"
+        (click)="sendEvent('clickPromo', linkTitle)">
+        <div class="distinguished-link mat-elevation-z0">
+          <mat-icon fontSet="material-icons-outlined" color="accent">directions</mat-icon>
+          <span>{{ linkTitle }}</span>
+        </div>
+      </a>
+      <a
+        *rxLet="'Kalkulator Kreditne Sposobnosti' as linkTitle"
+        routerLink="/kreditna-sposobnost"
+        (click)="closeSidenav(linkTitle)">
+        <div class="distinguished-link mat-elevation-z0">
+          <mat-icon fontSet="material-icons-outlined" color="accent">credit_score</mat-icon>
+          <span>{{ linkTitle }}</span>
+        </div>
+      </a>
+    </section>
+    <div class="sticky-footer mat-elevation-z24">
+<!--      <div class="distinguished-customer-support" (click)="openCustomerSupportDialog()">-->
+      <div class="distinguished-customer-support">
+        <mat-icon>support_agent</mat-icon>
+        <span>Korisnička podrška</span>
+      </div>
+      <a
+        *ngIf="!user?.agency?.syncEnabled"
+        href="https://moja.4zida.rs/postavka-oglasa/kreiraj"
+        (click)="sendEvent('click', 'PostaviOglas')">
+        <button mat-flat-button color="primary" class="w-full">Postavi oglas</button>
+      </a>
+    </div>
+  </section>
 </ng-container>

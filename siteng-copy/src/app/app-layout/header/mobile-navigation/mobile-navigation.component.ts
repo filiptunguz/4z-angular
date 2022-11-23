@@ -12,6 +12,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {GtagAction, GtagService} from "../../../misc/services/gtag.service";
 import {PlatformService} from "../../services/platform.service";
 import {CdnPipe} from "../../pipes/cdn.pipe";
+import {sidenavAnimationLeft, sidenavAnimationRight} from "./sidenav.animation";
 
 enum Sidenav {
   myAds = -1,
@@ -30,6 +31,7 @@ enum Sidenav {
   imports: [CommonModule, LetModule, DesktopNavigationComponent, MatIconModule, RouterLinkWithHref, MatToolbarModule, MatButtonModule, NgOptimizedImage, CdnPipe],
   templateUrl: './mobile-navigation.component.html',
   styleUrls: ['./mobile-navigation.component.scss'],
+  animations: [sidenavAnimationLeft, sidenavAnimationRight],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MobileNavigationComponent {
@@ -66,5 +68,14 @@ export class MobileNavigationComponent {
     this.platform.setBodyNoScroll(true);
 
     if (gtagLabel) this.sendEvent('click', gtagLabel);
+  }
+
+  get Sidenav() {
+    return Sidenav;
+  }
+
+  setActiveSidenav(sidenav: Sidenav) {
+    this.activeSidenav = sidenav;
+    this.platform.setBodyNoScroll(true);
   }
 }
