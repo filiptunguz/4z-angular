@@ -1,4 +1,5 @@
 import {For, Type} from "../ad/ad";
+import {resolveResizedUrl} from "../app-layout/imgproxy";
 
 export enum UserType {
   Admin = 5,
@@ -97,10 +98,10 @@ export class User {
   // checkBookmarks(adId: string): boolean {
   //   return this.activeBookmarkAdIds?.includes(adId);
   // }
-  //
-  // resolveAvatarUrl(width: number, height: number, mode: 'fit' | 'fill' | 'auto', format: 'jpeg' | 'webp'): string | null {
-  //   return resolveResizedUrl(this.avatarUrlTemplate, width, height, mode, format);
-  // }
+
+  resolveAvatarUrl(width: number, height: number, mode: 'fit' | 'fill' | 'auto', format: 'jpeg' | 'webp'): string | null {
+    return resolveResizedUrl(this.avatarUrlTemplate, width, height, mode, format);
+  }
 }
 
 // enum AgencyType {
