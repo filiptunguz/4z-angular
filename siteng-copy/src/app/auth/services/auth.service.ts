@@ -38,6 +38,7 @@ export class AuthService {
   }
 
   loadUserFromApiKey(): void {
+    this.stateService.setUser(null); // TODO: fix remove this line when find solution for cookies on build:ssrf
     if (this.credentialsStorage.hasApiKey()) {
       const context = new HttpContext().set(SEND_CREDENTIALS, true);
       this.http
