@@ -1,0 +1,38 @@
+<section
+  class="carousel-section"
+  #carouselSection
+  waIntersectionObserver
+  waIntersectionThreshold="0.5">
+  <div class="swiper" #carousel>
+    <ng-container *rxFor="let item of items; let i = index">
+      <div
+        class="item"
+        #carouselItems
+        (waIntersectionObservee)="intersectElement($event, i)"
+        (click)="slideToMainItem(i)"
+        (dblclick)="zoom($event, i)"
+        [ngClass]="{ 'cursor-pointer': secondaryTwin }">
+        <ng-container *ngIf="loadItem(i)">
+          <ng-container [ngTemplateOutlet]="item"></ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+  <div class="navigation left-2">
+    <mat-icon (click)="slide(true)">arrow_back_ios</mat-icon>
+  </div>
+  <div class="navigation right-2">
+    <mat-icon (click)="slide(false)">arrow_forward_ios</mat-icon>
+  </div>
+</section>
+<ng-container *ngIf="breakPointOptions.pagination">
+  <section class="flex gap-2 mt-4 justify-center">
+    <ng-container *rxFor="let itemNumber of items; index as i">
+      <span
+        class="w-3 h-3 rounded-xl bg-black/20"
+        [ngClass]="{ '!bg-black': focusItem === i }"
+        (click)="slideToItem(i)">
+      </span>
+    </ng-container>
+  </section>
+</ng-container>
