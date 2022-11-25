@@ -3,11 +3,12 @@ import {HeaderComponent} from "../app-layout/header/header.component";
 import {environment} from "../../environments/environment";
 import {NgOptimizedImage} from "@angular/common";
 import {ServerRenderDirective} from "../app-layout/directives/server-render.directive";
+import {HomeSearchComponent} from "./home-search/home-search.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeaderComponent, NgOptimizedImage, ServerRenderDirective],
+  imports: [HeaderComponent, NgOptimizedImage, ServerRenderDirective, HomeSearchComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
