@@ -4,17 +4,16 @@ import {GtagService} from '../../misc/services/gtag.service';
 import {environment} from '../../../environments/environment';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
-import {NgIf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {RouterLinkWithHref} from '@angular/router';
 import {CarouselComponent, CarouselOptions} from '../../app-layout/carousel/carousel.component';
-import {ForModule} from "@rx-angular/template";
 
 @Component({
   selector: 'app-comparative-advantage',
   templateUrl: './comparative-advantage.component.html',
   styleUrls: ['./comparative-advantage.component.scss'],
   standalone: true,
-  imports: [NgIf, RouterLinkWithHref, MatIconModule, CarouselComponent, ForModule],
+  imports: [NgIf, RouterLinkWithHref, MatIconModule, CarouselComponent, NgForOf],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -31,10 +30,14 @@ export class ComparativeAdvantageComponent {
     this.options = {
       visibleItems: 1,
       spaceBetween: 0.5,
+      pagination: {
+        pagination: true,
+      },
       auto: {
-        // auto: true,
+        auto: true,
         delay: 4000,
       },
+      loop: true,
       breakpoints: {
         0: {
           visibleItems: 1,

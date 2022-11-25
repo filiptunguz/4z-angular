@@ -8,16 +8,19 @@
   --item-width: calc((100% / var(--visible-items)) - var(--space-between) + (var(--space-between) / var(--visible-items)));
   --space-between: calc(var(--space) * 1rem);
   --delay: 200ms;
-  --display-navigation: flex;
+  --display-navigation: none;
+  --width: 100%;
 
   position: relative;
   height: 100%;
   width: 100%;
 }
 
-.swiper {
+.carousel {
   display: flex;
   height: 100%;
+  width: var(--width);
+  margin: 0 auto;
   white-space: nowrap;
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
@@ -28,7 +31,7 @@
   scrollbar-width: none; /* for Firefox */
 }
 
-.swiper::-webkit-scrollbar {
+.carousel::-webkit-scrollbar {
   display: none; /* for Chrome, Safari, and Opera */
 }
 

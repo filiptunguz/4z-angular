@@ -4,11 +4,12 @@ import {environment} from "../../environments/environment";
 import {NgOptimizedImage} from "@angular/common";
 import {ServerRenderDirective} from "../app-layout/directives/server-render.directive";
 import {HomeSearchComponent} from "./home-search/home-search.component";
+import {ComparativeAdvantageComponent} from "./comparative-advantage/comparative-advantage.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeaderComponent, NgOptimizedImage, ServerRenderDirective, HomeSearchComponent],
+    imports: [HeaderComponent, NgOptimizedImage, ServerRenderDirective, HomeSearchComponent, ComparativeAdvantageComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

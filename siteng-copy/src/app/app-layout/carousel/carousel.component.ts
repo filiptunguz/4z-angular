@@ -5,9 +5,11 @@ import {
   Component,
   ContentChildren,
   ElementRef,
+  EventEmitter,
   inject,
   Input,
   NgZone,
+  Output,
   QueryList,
   TemplateRef,
   ViewChild,
@@ -17,7 +19,7 @@ import {NgClass, NgIf, NgTemplateOutlet} from '@angular/common';
 import {filter, fromEvent, interval} from 'rxjs';
 import {WINDOW} from '@ng-web-apis/common';
 import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
-import {IntersectionObserverModule} from "@ng-web-apis/intersection-observer";
+import {IntersectionObserverModule} from '@ng-web-apis/intersection-observer';
 import {TwinSlideService} from './twin-slide.service';
 import {MatIconModule} from '@angular/material/icon';
 import {ForModule} from "@rx-angular/template";
@@ -26,34 +28,46 @@ export interface CarouselOptions {
   visibleItems?: number;
   loop?: boolean;
   lazy?: LazyCarousel;
-  navigation?: boolean;
+  navigation?: NavigationCarousel;
   spaceBetween?: number;
   auto?: AutoCarousel;
-  swiperTwin?: 'none' | 'main' | 'secondary';
+  carouselTwin?: 'none' | 'main' | 'secondary';
   breakpoints?: {
     [width: number]: CarouselOptions;
   };
-  pagination?: boolean;
+  pagination?: PaginationCarousel;
   keyboard?: boolean;
   zoom?: boolean;
 }
 
 export interface LazyCarousel {
-  lazy?: boolean;
+  lazy: boolean;
   items?: number;
 }
 
 export interface AutoCarousel {
-  auto?: boolean;
+  auto: boolean;
   delay?: number;
   reverse?: boolean;
+}
+
+export interface NavigationCarousel {
+  navigation: boolean;
+  color?: 'accent' | 'primary';
+  out?: boolean;
+}
+
+export interface PaginationCarousel {
+  pagination: boolean;
+  color?: 'accent' | 'primary';
+  inside?: boolean;
 }
 
 @UntilDestroy()
 @Component({
   selector: 'app-carousel',
   standalone: true,
-  imports: [MatIconModule, IntersectionObserverModule, NgClass, NgTemplateOutlet, ForModule, NgIf],
+  imports: [IntersectionObserverModule, MatIconModule, ForModule, NgClass, NgIf, NgTemplateOutlet],
   templateUrl: './carousel.component.html',
   styleUrls: ['./carousel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -71,23 +85,33 @@ export class CarouselComponent implements AfterViewInit {
   lastVisibleElement: number = 0;
   scrollLeft: number = 0;
   focusItem: number = 0;
+  navigationReady: boolean = false;
+  leftNavigator: boolean = false;
+  rightNavigator: boolean = true;
+  firstIntersection: boolean = false;
+  paginationSlide: boolean = false;
+  lastTap: number = 0;
 
   options: CarouselOptions = {
     visibleItems: 1,
     loop: false,
     lazy: {
       lazy: false,
-      items: 1,
+      items: 0,
     },
-    navigation: false,
+    navigation: {
+      navigation: false,
+    },
     spaceBetween: 1,
-    swiperTwin: 'none',
+    carouselTwin: 'none',
     auto: {
       auto: false,
       delay: 1000,
       reverse: false,
     },
-    pagination: false,
+    pagination: {
+      pagination: false,
+    },
     keyboard: false,
     zoom: false,
   };
@@ -105,7 +129,15 @@ export class CarouselComponent implements AfterViewInit {
     }
     if (config.lazy) {
       Object.assign(this.options.lazy as LazyCarousel, config.lazy);
-      Object.assign(config.lazy as AutoCarousel, this.options.lazy);
+      Object.assign(config.lazy as LazyCarousel, this.options.lazy);
+    }
+    if (config.pagination) {
+      Object.assign(this.options.pagination as PaginationCarousel, config.pagination);
+      Object.assign(config.pagination as PaginationCarousel, this.options.pagination);
+    }
+    if (config.navigation) {
+      Object.assign(this.options.navigation as NavigationCarousel, config.navigation);
+      Object.assign(config.navigation as NavigationCarousel, this.options.navigation);
     }
     Object.assign(this.options, config);
 
@@ -116,14 +148,17 @@ export class CarouselComponent implements AfterViewInit {
     }
   }
 
+  @Output() init = new EventEmitter();
+
   resize$ = fromEvent(this.windowRef, 'resize');
 
   ngAfterViewInit(): void {
+    // TODO: Find a way to fix it
     if (!this.breakPointOptions.lazy?.lazy) {
       this.changeDetectorRef.detach();
     }
 
-    this.setSwiperOptions();
+    this.setCarouselOptions();
     this.itemWidth =
       this.carousel.nativeElement.firstChild.offsetWidth +
       this.breakPointOptions.spaceBetween! * 16;
@@ -177,6 +212,15 @@ export class CarouselComponent implements AfterViewInit {
         )
         .subscribe(() => this.setBreakpointProperties());
     }
+
+    // Detect changes for all properties that depends on navigationReady
+    if (this.breakPointOptions.navigation) {
+      this.navigationReady = true;
+      this.detectChanges();
+    }
+
+    this.init.emit();
+    this.changeDetectorRef.detach();
   }
 
   slide(left: boolean) {
@@ -184,7 +228,7 @@ export class CarouselComponent implements AfterViewInit {
       this.carousel.nativeElement.firstChild.offsetWidth +
       this.breakPointOptions.spaceBetween! * 16;
 
-    const scrollLeft = this.carousel.nativeElement.scrollLeft;
+    this.scrollLeft = this.carousel.nativeElement.scrollLeft;
     const maxScroll =
       this.carousel.nativeElement.scrollWidth - this.carousel.nativeElement.offsetWidth;
 
@@ -192,15 +236,15 @@ export class CarouselComponent implements AfterViewInit {
       this.scrollLeft = maxScroll;
     }
 
-    if (scrollLeft < maxScroll - maxScroll * 0.01 && (scrollLeft !== 0 || !left)) {
+    if (this.scrollLeft < maxScroll - maxScroll * 0.01 && (this.scrollLeft !== 0 || !left)) {
       this.scrollLeft += left ? -1 * this.itemWidth : this.itemWidth;
-    } else if (1 - scrollLeft / maxScroll < 0.01 && scrollLeft !== 0) {
+    } else if (1 - this.scrollLeft / maxScroll < 0.01 && this.scrollLeft !== 0) {
       if (this.breakPointOptions.loop) {
         this.scrollLeft = left ? this.scrollLeft + -1 * this.itemWidth : 0;
       } else if (left) {
         this.scrollLeft = this.scrollLeft + -1 * this.itemWidth;
       }
-    } else if (scrollLeft === 0) {
+    } else if (this.scrollLeft === 0) {
       if (this.breakPointOptions.loop) {
         this.scrollLeft = maxScroll;
       }
@@ -234,18 +278,12 @@ export class CarouselComponent implements AfterViewInit {
     });
 
     if (this.breakPointOptions.lazy?.lazy) {
-      // Variant with virtual loading
-      // this.visibleElements = [
-      //   -1 * this.breakPointOptions.lazy!.items!,
-      //   this.breakPointOptions.visibleItems! + this.breakPointOptions.lazy!.items!,
-      // ];
-
       // Variant with all visible elements on the end
       this.lastVisibleElement =
         this.breakPointOptions.lazy!.items! + this.breakPointOptions.visibleItems!;
     }
 
-    this.setSwiperOptions();
+    this.setCarouselOptions();
   }
 
   setPrevNextBreakpoints(breakpoints: number[]) {
@@ -260,26 +298,44 @@ export class CarouselComponent implements AfterViewInit {
     this.prevBreakpoint = Math.max.apply(Math, prevBreakpoints);
   }
 
-  setSwiperOptions() {
+  setCarouselOptions() {
     if (this.carouselSection) {
-      const swiperElement = this.carouselSection.nativeElement;
-      const setSwiperProperty = (property: string, value: string | number) => {
-        swiperElement.style.setProperty(property, value);
+      const carouselElement = this.carouselSection.nativeElement;
+      const setCarouselProperty = (property: string, value: string | number) => {
+        carouselElement.style.setProperty(property, value);
       };
 
-      setSwiperProperty('--visible-items', this.breakPointOptions.visibleItems!.toString());
-      setSwiperProperty('--space', this.breakPointOptions.spaceBetween!.toString());
-      setSwiperProperty(
-        '--display-navigation',
-        this.breakPointOptions.navigation ? 'flex' : 'none'
-      );
+      // Also used for virtual lazy loading variant
+      this.visibleElements = [
+        -1 * (this.breakPointOptions.lazy?.items ?? 0),
+        this.breakPointOptions.visibleItems! + (this.breakPointOptions.lazy?.items ?? 0),
+      ];
+
+      this.leftNavigator = !!this.breakPointOptions.loop;
+
+      setCarouselProperty('--visible-items', this.breakPointOptions.visibleItems!.toString());
+      setCarouselProperty('--space', this.breakPointOptions.spaceBetween!.toString());
+      if (this.breakPointOptions.navigation?.out) {
+        setCarouselProperty('--width', '90%');
+      }
+      if (this.breakPointOptions.navigation?.navigation) {
+        setCarouselProperty('--display-navigation', 'flex');
+      }
     }
   }
 
   slideToItem(index: number) {
-    const item = this.carouselItems.find((el, i) => index === i);
-    this.carousel.nativeElement.scrollLeft = item?.nativeElement.offsetLeft;
-    this.focusPaginationItem(index);
+    if (this.focusItem !== index) {
+      const item = this.carouselItems.find((el, i) => index === i);
+      this.carousel.nativeElement.scrollLeft = item?.nativeElement.offsetLeft;
+      this.paginationSlide = true;
+
+      // While scrolling animation
+      setTimeout(() => {
+        this.paginationSlide = false;
+      }, 600);
+      this.focusPaginationItem(index);
+    }
   }
 
   loadItem(index: number) {
@@ -296,22 +352,22 @@ export class CarouselComponent implements AfterViewInit {
 
   intersectElement(event: IntersectionObserverEntry[], i: number) {
     // TODO: Try to do lazy load from here (to prevent doing loadItem for every element)
-
-    // For zoom out
-    if (this.breakPointOptions.zoom) {
-      const item = this.carouselItems.find((el, index) => i === index)?.nativeElement.firstChild;
-      if (item) item.style.transform = 'scale(1)';
-    }
-
-    // Variant like virtual scroll
-    // const firstElement = this.visibleElements[0];
-    // const lastElement = this.visibleElements[1];
-    // const visibleItems = this.breakPointOptions.visibleItems!;
-    const offsetElements = this.breakPointOptions.lazy!.items!;
-
     event
       .filter(entry => entry.isIntersecting)
       .map(() => {
+        // For zoom out
+        if (this.breakPointOptions.zoom) {
+          const item = this.carouselItems.find((el, index) => i === index)?.nativeElement
+            .firstChild;
+          if (item) item.style.transform = 'scale(1)';
+        }
+
+        // Variant like virtual scroll
+        // const firstElement = this.visibleElements[0];
+        // const lastElement = this.visibleElements[1];
+        const visibleItems = this.breakPointOptions.visibleItems!;
+        const offsetElements = this.breakPointOptions.lazy!.items!;
+
         // Variant like virtual scroll
         // if (this.breakPointOptions.lazy?.lazy) {
         //   if (i - offsetElements < firstElement) {
@@ -325,10 +381,49 @@ export class CarouselComponent implements AfterViewInit {
         //   }
         // }
 
+        // For scrolling pagination focus
+        if (!this.paginationSlide) {
+          // Detect first and last element
+          const firstElement = this.visibleElements[0];
+          const lastElement = this.visibleElements[1] - 1;
+
+          if (!this.firstIntersection && i >= Math.round(visibleItems)) {
+            this.firstIntersection = true;
+          }
+
+          if (i <= firstElement) {
+            this.visibleElements[0] = i;
+            this.visibleElements[1] = i + visibleItems;
+            this.focusPaginationItem(i);
+          }
+
+          if (i >= lastElement && this.firstIntersection) {
+            this.visibleElements[1] = i;
+            this.visibleElements[0] = i - visibleItems + 1;
+            this.focusPaginationItem(this.visibleElements[0]);
+          }
+        }
+
         // Variant with all visible elements on the end
         if (this.breakPointOptions.lazy?.lazy) {
           if (i + offsetElements >= this.lastVisibleElement) {
             this.lastVisibleElement = i + offsetElements;
+          }
+        }
+
+        // For navigation
+        // The idea is to detect changes only when it is really needed
+        if (this.breakPointOptions.navigation && !this.breakPointOptions.loop) {
+          if (this.firstIntersection) {
+            if ((i > 0 && !this.leftNavigator) || (i === 0 && this.leftNavigator)) {
+              this.leftNavigator = !this.leftNavigator;
+              this.detectChanges();
+            }
+            // (this.breakPointOptions.loop ? 1 : 0) for last pagination fix
+            if (this.rightNavigator !== (i !== this.carouselItems.length - 1)) {
+              this.rightNavigator = i !== this.carouselItems.length - 1;
+              this.detectChanges();
+            }
           }
         }
 
@@ -347,9 +442,9 @@ export class CarouselComponent implements AfterViewInit {
   focusPaginationItem(index: number | null) {
     const focusedItem = this.focusItem;
 
-    if (this.breakPointOptions.pagination) {
+    if (this.breakPointOptions.pagination?.pagination) {
       if (index !== null) {
-        this.focusItem = index;
+        this.focusItem = Math.round(index);
       } else {
         const newFocus = Math.round(this.scrollLeft / this.itemWidth);
         const lastItem = this.carouselItems.length - 1;
@@ -358,34 +453,88 @@ export class CarouselComponent implements AfterViewInit {
     }
 
     if (focusedItem !== this.focusItem && !this.breakPointOptions.lazy?.lazy) {
-      this.zone.runOutsideAngular(() => {
-        this.changeDetectorRef.detectChanges();
-      });
+      this.detectChanges();
     }
   }
 
-  zoom(event: MouseEvent, index: number) {
-    event.preventDefault();
-    if (this.breakPointOptions.zoom) {
-      const item = this.carouselItems.find((el, i) => i === index)?.nativeElement.firstChild;
+  zoom(item: any, x: number, y: number) {
+    item.style.transition = 'transform 200ms ease-in-out';
 
-      item.style.transition = 'transform 200ms ease-in-out';
+    if (!item.style.transform || item.style.transform === 'scale(1)') {
+      let xZoom = x - item.getBoundingClientRect().left;
+      let yZoom = y - item.getBoundingClientRect().top;
 
-      if (!item.style.transform || item.style.transform === 'scale(1)') {
-        let xZoom = event.x - item.getBoundingClientRect().left;
-        let yZoom = event.y - item.getBoundingClientRect().top;
+      const itemWidth = item.offsetWidth;
+      const itemHeight = item.offsetHeight;
 
-        const itemWidth = item.offsetWidth;
-        const itemHeight = item.offsetHeight;
+      xZoom = 100 - (xZoom / itemWidth) * 200;
+      yZoom = 100 - (yZoom / itemHeight) * 200;
 
-        xZoom = 100 - (xZoom / itemWidth) * 200;
-        yZoom = 100 - (yZoom / itemHeight) * 200;
-
-        item.style.transform = `translate(${xZoom}%, ${yZoom}%) scale(3)`;
-      } else {
-        item.style.transform = `scale(1)`;
-      }
+      item.style.transform = `translate(${xZoom}%, ${yZoom}%) scale(3)`;
+    } else {
+      item.style.transform = `scale(1)`;
     }
+  }
+
+  desktopZoom(event: MouseEvent, index: number) {
+    if (this.breakPointOptions.zoom) {
+      event.preventDefault();
+      const item = this.carouselItems.find((el, i) => i === index)?.nativeElement.firstChild;
+      this.zoom(item, event.x, event.y);
+    }
+  }
+
+  detectDoubleTapClosure(event: TouchEvent, index: number) {
+    const curTime = new Date().getTime();
+    const tapLen = curTime - this.lastTap;
+    if (tapLen < 1000 && tapLen > 0) {
+      event.preventDefault();
+      const item = this.carouselItems.find((el, i) => i === index)?.nativeElement.firstChild;
+      this.zoom(item, event.touches[0].clientX, event.touches[0].clientY);
+    } else {
+      const timeout = setTimeout(() => {
+        clearTimeout(timeout);
+      }, 500);
+    }
+    this.lastTap = this.lastTap > 0 ? 0 : curTime;
+  }
+
+  get showNavigation() {
+    if (this.breakPointOptions.navigation?.navigation) {
+      const spaceBetween = this.breakPointOptions.spaceBetween!;
+      const visibleItems = this.breakPointOptions.visibleItems!;
+
+      return (
+        visibleItems * (this.itemWidth + spaceBetween) - spaceBetween >
+        this.carousel.nativeElement.offsetWidth
+      );
+    }
+
+    return false;
+  }
+
+  detectChanges() {
+    this.changeDetectorRef.detectChanges();
+  }
+
+  get maxPaginationItems() {
+    if (this.items) {
+      return this.items.length - (this.breakPointOptions.visibleItems! - 1);
+    }
+
+    return;
+  }
+
+  get paginationInside() {
+    return this.breakPointOptions.pagination?.inside;
+  }
+
+  get paginationColor() {
+    const color = this.breakPointOptions.pagination?.color;
+    if (color) {
+      return color === 'accent' ? '!bg-orange-500' : '!bg-green-500';
+    }
+    return '!bg-white';
   }
 
   get breakpointTrigger() {
@@ -396,10 +545,10 @@ export class CarouselComponent implements AfterViewInit {
   }
 
   get secondaryTwin(): boolean {
-    return this.breakPointOptions.swiperTwin === 'secondary';
+    return this.breakPointOptions.carouselTwin === 'secondary';
   }
 
   get mainTwin(): boolean {
-    return this.breakPointOptions.swiperTwin === 'main';
+    return this.breakPointOptions.carouselTwin === 'main';
   }
 }
