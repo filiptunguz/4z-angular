@@ -9,12 +9,13 @@ import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
 import {pairwise, startWith, tap} from "rxjs";
 import {SearchFilter} from "../../search/search-filters/search-filter";
 import {SearchService} from "../../search/search.service";
+import {HomeSearchMobileComponent} from "./home-search-mobile/home-search-mobile.component";
 
 @UntilDestroy()
 @Component({
   selector: 'app-home-search',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HomeSearchMobileComponent],
   templateUrl: './home-search.component.html',
   styleUrls: ['./home-search.component.scss']
 })

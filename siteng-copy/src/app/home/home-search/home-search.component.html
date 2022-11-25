@@ -1,1 +1,12 @@
-<p>home-search works!</p>
+<app-home-search-mobile
+  *ngIf="!isDesktopFormView"
+  [formGroup]="formGroup"
+  (submit)="submitForm()"
+  (gtagProps)="gtag.eventFromProps($event)"
+></app-home-search-mobile>
+<!--<app-home-search-desktop-->
+<!--  *ngIf="isDesktopFormView"-->
+<!--  [formGroup]="formGroup"-->
+<!--  (submit)="submitForm()"-->
+<!--  (gtagProps)="gtag.eventFromProps($event)"-->
+<!--&gt;</app-home-search-desktop>-->
