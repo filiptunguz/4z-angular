@@ -37,6 +37,7 @@
     "@rx-angular/template": "^1.0.0-rc.4",
     "@tailwindcss/line-clamp": "^0.4.2",
     "express": "^4.15.2",
+    "intersection-observer": "^0.12.2",
     "ngx-cookie": "^6.0.1",
     "node-cache": "^5.1.2",
     "rxjs": "~7.4.0",
