@@ -1,4 +1,4 @@
-import {inject, Injectable, PLATFORM_ID} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Params, Router, UrlSerializer} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {map, Observable, of} from 'rxjs';
@@ -7,6 +7,8 @@ import {map, Observable, of} from 'rxjs';
 // import { SearchFilter, SpecificSearchFilter } from './search-filters/search-filter';
 // import { PremiumListAd } from '../ad/premium-list.context';
 import {AdSearchResults} from "./search.context";
+import {SearchFilter, SpecificSearchFilter} from "./search-filters/search-filter";
+import {PlaceService} from "./place.service";
 
 export interface RouteAndParams {
   route: string;
@@ -26,6 +28,11 @@ export interface RoutePlaceAware {
   providedIn: 'root',
 })
 export class SearchService {
+  http = inject(HttpClient);
+  placesService = inject(PlaceService);
+  serializer = inject(UrlSerializer);
+  router = inject(Router);
+
   baseUrl = 'https://api.4zida.rs/v6';
 
   /**
@@ -46,15 +53,6 @@ export class SearchService {
     }
     return [];
   }
-
-  private platformId = inject(PLATFORM_ID);
-
-  constructor(
-    private http: HttpClient,
-    private placesService: PlaceService,
-    private serializer: UrlSerializer,
-    private router: Router
-  ) {}
 
   snapshotToFilter(snapshot: ActivatedRouteSnapshot): Observable<SpecificSearchFilter> {
     const filter = SearchFilter.fromSnapshot(snapshot);

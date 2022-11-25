@@ -1,4 +1,13 @@
- import {Directive, Inject, InjectionToken, OnInit, PLATFORM_ID, TemplateRef, ViewContainerRef} from '@angular/core';
+ import {
+  Directive,
+   inject,
+  Inject,
+  InjectionToken,
+  OnInit,
+  PLATFORM_ID,
+  TemplateRef,
+  ViewContainerRef
+} from '@angular/core';
 import {isPlatformBrowser} from "@angular/common";
 
 @Directive({
@@ -6,14 +15,10 @@ import {isPlatformBrowser} from "@angular/common";
   standalone: true
 })
 export class BrowserRenderDirective implements OnInit {
+  private viewContainer = inject(ViewContainerRef);
+  private templateRef = inject(TemplateRef<any>);
 
-  constructor(
-    private viewContainer: ViewContainerRef,
-    private templateRef: TemplateRef<any>,
-    @Inject(PLATFORM_ID) private platformId: InjectionToken<Object>
-  ) {
-
-  }
+  constructor(@Inject(PLATFORM_ID) private platformId: InjectionToken<Object>) {}
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {

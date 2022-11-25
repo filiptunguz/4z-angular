@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable, of, tap} from 'rxjs';
 import {RequestCacheService} from "./request-cache.service";
@@ -8,9 +8,7 @@ import {RequestCacheService} from "./request-cache.service";
  */
 @Injectable()
 export class CachingInterceptor implements HttpInterceptor {
-
-  constructor(private requestCacheService: RequestCacheService) {
-  }
+  requestCacheService = inject(RequestCacheService);
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // Early exit

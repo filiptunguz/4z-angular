@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, inject, Inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MAT_SNACK_BAR_DATA, MatSnackBarRef} from "@angular/material/snack-bar";
 import {Message, NotifierService} from "../notifier.service";
@@ -12,12 +12,10 @@ import {MatButtonModule} from "@angular/material/button";
   styleUrls: ['./notification.component.scss']
 })
 export class NotificationComponent {
+  public snackBarRef = inject(MatSnackBarRef<NotificationComponent>);
+  public notifier = inject(NotifierService);
 
-  constructor(
-    @Inject(MAT_SNACK_BAR_DATA) public message: Message,
-    public snackBarRef: MatSnackBarRef<NotificationComponent>,
-    private notifier: NotifierService
-  ) { }
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public message: Message) { }
 
   close() {
     this.notifier.close(this.message.key, this.message.expiresAtRelative);
