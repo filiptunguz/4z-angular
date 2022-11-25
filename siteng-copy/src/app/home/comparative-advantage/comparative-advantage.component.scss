@@ -1,0 +1,58 @@
+@use './src/styles/colors';
+
+
+app-comparative-advantage {
+  display: block;
+}
+
+#comparative-advantages-swiper {
+  --swiper-pagination-color: white;
+  --min-height-slide: 190px;
+
+  max-width: 340px;
+  margin: 0 auto;
+
+  @media (min-width: 599px) {
+    max-width: 100%;
+  }
+
+  .card-advantage {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: map-get(colors.$smoke, 500);
+    border: 2px solid rgba(255, 255, 255, .9);
+    border-radius: 8px;
+    color: white;
+    min-height: var(--min-height-slide);
+    width: 100%;
+    white-space: break-spaces;
+
+    .card-advantage-title {
+      display: flex;
+      gap: 1rem;
+
+      h3 {
+        margin-bottom: 0;
+      }
+    }
+
+    .card-advantage-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-grow: 1;
+
+      p {
+        margin-top: 1rem;
+      }
+    }
+  }
+
+  .svg-icon {
+    min-width: 2.5rem;
+    height: 2.5rem;
+    font-size: 2.5rem;
+    color: colors.$accent;
+  }
+}

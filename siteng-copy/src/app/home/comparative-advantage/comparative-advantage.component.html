@@ -1,0 +1,64 @@
+<app-carousel
+  [config]="options"
+  class="pagination-bullets-outset"
+  id="comparative-advantages-swiper">
+  <ng-template *rxFor="let advantage of advantages" #carouselItem>
+    <!-- with internal link -->
+    <a
+      *ngIf="advantage.link.internal"
+      [title]="advantage.title"
+      class="card-advantage"
+      [routerLink]="advantage.link.internal"
+      (click)="gtag.event('clickPromo', 'PromoFrontPage', advantage.title)">
+      <div class="card-advantage-title">
+        <mat-icon
+          aria-hidden="false"
+          class="svg-icon"
+          [svgIcon]="advantage.icon.custom ? advantage.icon.key : ''"
+          >{{ advantage.icon.key }}</mat-icon
+        >
+        <h3>{{ advantage.title }}</h3>
+      </div>
+      <div class="card-advantage-content">
+        <p>{{ advantage.description }}</p>
+        <div>
+          <a
+            title="Saznaj više"
+            [routerLink]="advantage.link.internal"
+            class="link-accent link-animated font-medium"
+            >Saznaj više</a
+          >
+        </div>
+      </div>
+    </a>
+
+    <!-- with external link -->
+    <a
+      *ngIf="advantage.link.external"
+      [title]="advantage.title"
+      class="card-advantage"
+      [attr.href]="advantage.link.external"
+      (click)="gtag.event('clickPromo', 'PromoFrontPage', advantage.title)">
+      <div class="card-advantage-title">
+        <mat-icon
+          aria-hidden="false"
+          class="svg-icon"
+          [svgIcon]="advantage.icon.custom ? advantage.icon.key : ''"
+          >{{ advantage.icon.key }}</mat-icon
+        >
+        <h3>{{ advantage.title }}</h3>
+      </div>
+      <div class="card-advantage-content">
+        <p>{{ advantage.description }}</p>
+        <div>
+          <a
+            [attr.href]="advantage.link.external"
+            title="Saznaj više"
+            class="link-accent link-animated font-medium"
+            >Saznaj više</a
+          >
+        </div>
+      </div>
+    </a>
+  </ng-template>
+</app-carousel>
