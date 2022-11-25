@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {NgIf, NgOptimizedImage} from '@angular/common';
 import {AuthService} from "../../../auth/services/auth.service";
 import {Observable} from "rxjs";
 import {User} from "../../../auth/me.context";
@@ -28,7 +28,7 @@ enum Sidenav {
 @Component({
   selector: 'app-mobile-navigation',
   standalone: true,
-  imports: [CommonModule, LetModule, DesktopNavigationComponent, MatIconModule, RouterLinkWithHref, MatToolbarModule, MatButtonModule, NgOptimizedImage, CdnPipe],
+  imports: [LetModule, DesktopNavigationComponent, MatIconModule, RouterLinkWithHref, MatToolbarModule, MatButtonModule, NgOptimizedImage, CdnPipe, NgIf],
   templateUrl: './mobile-navigation.component.html',
   styleUrls: ['./mobile-navigation.component.scss'],
   animations: [sidenavAnimationLeft, sidenavAnimationRight],

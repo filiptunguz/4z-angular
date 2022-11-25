@@ -1,5 +1,5 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgIf} from '@angular/common';
 import {AbstractControl, FormControl, FormGroup} from "@angular/forms";
 import {For, Type, TYPE_OPTIONS_MAP} from "../../ad/ad";
 import {BreakpointObserver} from "@angular/cdk/layout";
@@ -15,7 +15,7 @@ import {HomeSearchMobileComponent} from "./home-search-mobile/home-search-mobile
 @Component({
   selector: 'app-home-search',
   standalone: true,
-  imports: [CommonModule, HomeSearchMobileComponent],
+  imports: [HomeSearchMobileComponent, NgIf],
   templateUrl: './home-search.component.html',
   styleUrls: ['./home-search.component.scss']
 })

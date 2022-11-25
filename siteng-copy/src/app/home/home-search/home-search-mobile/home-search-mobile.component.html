@@ -1,1 +1,43 @@
-<p>home-search-mobile works!</p>
+<form
+  *ngIf="formGroup"
+  id="home-search-form-mobile"
+  class="mat-elevation-z5"
+  autocomplete="off"
+  novalidate
+  [formGroup]="formGroup"
+  data-cy="mobileHomeSearch"
+>
+  <div class="tabs-container">
+    <div
+      class="for-tab"
+      [ngClass]="{'tab-active' : getFormControl('for').value === For.Sale}"
+      (click)="setForControl(For.Sale)"
+    >Prodaja</div>
+    <div
+      class="for-tab"
+      [ngClass]="{'tab-active' : getFormControl('for').value === For.Rent}"
+      (click)="setForControl(For.Rent)"
+    >Izdavanje</div>
+  </div>
+
+  <div class="form-group-mobile">
+    <app-dropdown-field
+      label="Vrsta nekretnine"
+      [control]="getFormControl('type')"
+      [optionMap]="typeOptionsMap"
+    ></app-dropdown-field>
+
+    <app-place-multi-select-mobile
+      formControlName="placeIds"
+      (optionSelected)="onPlaceSelect($event)"
+      (valueChange)="changeDetection()"
+      submitBtnLabel="Odaberi"
+    ></app-place-multi-select-mobile>
+
+    <div class="flex justify-center mt-5">
+      <mat-checkbox color="primary" formControlName="newBuilding" data-cy="onlyNewBuilding">Samo novogradnja</mat-checkbox>
+    </div>
+
+    <button mat-flat-button color="primary" type="submit" class="w-full !mt-5">Pretraži</button>
+  </div>
+</form>

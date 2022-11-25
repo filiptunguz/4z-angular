@@ -1,5 +1,4 @@
 import {Component, inject, Inject} from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {MAT_SNACK_BAR_DATA, MatSnackBarRef} from "@angular/material/snack-bar";
 import {Message, NotifierService} from "../notifier.service";
 import {MatButtonModule} from "@angular/material/button";
@@ -7,7 +6,7 @@ import {MatButtonModule} from "@angular/material/button";
 @Component({
   selector: 'app-notification',
   standalone: true,
-  imports: [CommonModule, MatButtonModule],
+  imports: [MatButtonModule],
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss']
 })

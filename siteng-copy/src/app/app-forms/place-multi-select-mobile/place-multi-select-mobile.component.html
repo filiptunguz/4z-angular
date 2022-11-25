@@ -1,1 +1,20 @@
-<p>place-multi-select-mobile works!</p>
+<mat-form-field
+  *ngIf="this.selected.size; else selectPlaceBtn"
+  class="w-full"
+  (click)="openDialog()"
+>
+  <mat-label>Izabrane lokacije</mat-label>
+  <mat-chip-list class="chip-list-selected" data-cy="mobileMultiSelectChipList">
+    <mat-chip *rxFor="let tuple of selected|keyvalue">{{ tuple.value.decoratedTitle }}</mat-chip>
+  </mat-chip-list>
+</mat-form-field>
+<ng-template #selectPlaceBtn>
+  <button
+    mat-stroked-button
+    class="w-full !p-3 font-normal !text-left"
+    type="button"
+    (click)="openDialog()"
+    data-cy="selectLocationMobile"
+  >Izaberi lokaciju
+  </button>
+</ng-template>

@@ -1,1 +1,39 @@
-<p>place-multi-select-dialog works!</p>
+<h3 mat-dialog-title>Izaberi lokaciju</h3>
+<mat-dialog-content class="mat-typography">
+  <mat-form-field class="w-full">
+    <mat-label>Lokacija</mat-label>
+    <input matInput placeholder="Upiši lokaciju" type="text" #place>
+  </mat-form-field>
+  <div *ngIf="data.selected?.size">
+    <label class="text-sm text-gray-500">Izabrane lokacije:</label>
+    <mat-checkbox
+      *rxFor="let idPlaceTuple of data.selected|keyvalue"
+      color="primary"
+      name="mobilePlaces"
+      value="{{idPlaceTuple.value.id}}"
+      class="checkbox-place-suggestion"
+      (change)="unSelect(idPlaceTuple.key)"
+      [disableRipple]="true"
+      [checked]="true">
+      {{idPlaceTuple.value.label}}
+    </mat-checkbox>
+    <mat-divider class="!mt-4"></mat-divider>
+  </div>
+  <ng-container *rxFor="let suggestion of suggestions">
+    <mat-checkbox
+      *ngIf="!data.selected.has(suggestion.id)"
+      color="primary"
+      name="mobilePlaces"
+      value="{{suggestion.id}}"
+      class="checkbox-place-suggestion"
+      (change)="select(suggestion)"
+      [disableRipple]="true"
+    >
+      {{suggestion.label}}
+    </mat-checkbox>
+  </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Poništi sve</button>
+  <button mat-flat-button color="primary" (click)="onConfirm()">{{data.submitBtnLabel}}</button>
+</mat-dialog-actions>
