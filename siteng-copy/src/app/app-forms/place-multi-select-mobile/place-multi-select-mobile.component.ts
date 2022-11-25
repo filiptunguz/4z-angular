@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {ControlValueAccessor, ReactiveFormsModule} from "@angular/forms";
 import {PlaceSuggestion} from "../place-suggestion";
 import {MatDialog} from "@angular/material/dialog";
@@ -26,7 +26,8 @@ import {ForModule} from "@rx-angular/template";
     ForModule
   ],
   templateUrl: './place-multi-select-mobile.component.html',
-  styleUrls: ['./place-multi-select-mobile.component.scss']
+  styleUrls: ['./place-multi-select-mobile.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlaceMultiSelectMobileComponent implements ControlValueAccessor {
   public dialog = inject(MatDialog);

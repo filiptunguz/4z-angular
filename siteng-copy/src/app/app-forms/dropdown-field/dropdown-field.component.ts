@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectChange, MatSelectModule} from "@angular/material/select";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
@@ -12,7 +12,8 @@ import {NgIf} from "@angular/common";
   standalone: true,
   imports: [MatFormFieldModule, MatSelectModule, ReactiveFormsModule, ForModule, NgIf],
   templateUrl: './dropdown-field.component.html',
-  styleUrls: ['./dropdown-field.component.scss']
+  styleUrls: ['./dropdown-field.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DropdownFieldComponent {
   @Input() control: FormControl = new FormControl<any>('default');

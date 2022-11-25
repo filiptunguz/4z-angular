@@ -1,4 +1,13 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, inject, Inject, ViewChild,} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Inject,
+  ViewChild,
+} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {debounceTime, filter, fromEvent, map, of, switchMap, tap} from "rxjs";
 import {UntilDestroy, untilDestroyed} from "@ngneat/until-destroy";
@@ -34,7 +43,8 @@ export interface DialogData {
     MatInputModule
   ],
   templateUrl: './place-multi-select-dialog.component.html',
-  styleUrls: ['./place-multi-select-dialog.component.scss']
+  styleUrls: ['./place-multi-select-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlaceMultiSelectDialogComponent implements AfterViewInit {
   public dialogRef = inject(MatDialogRef<PlaceMultiSelectDialogComponent>);
