@@ -1,0 +1,14 @@
+<mat-form-field>
+  <mat-label>{{label}}</mat-label>
+  <mat-select [formControl]="control" [multiple]="multiple" (selectionChange)="valueSelected($event)">
+    <mat-option
+      *rxFor="let item of options"
+      #matOption
+      (click)="clickedOn.emit(matOption)"
+      [value]="item.value"
+    >{{ item.label }}</mat-option>
+  </mat-select>
+  <mat-error *ngIf="control.hasError('validationError')">
+    {{ control.getError('validationError') }}
+  </mat-error>
+</mat-form-field>
