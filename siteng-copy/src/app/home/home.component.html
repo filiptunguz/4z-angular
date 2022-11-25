@@ -1,2 +1,24 @@
 <app-header></app-header>
+<main>
+  <section class="relative py-8">
+    <h1 class="text-white !text-3xl !font-extrabold text-center px-8">4zida - glavni i najbolji sajt za nekretnine u Srbiji!</h1>
+    <div class="absolute top-0 -z-1 w-full">
+      <div class="background">
+        <picture class="w-full">
+          <source type="image/webp" [srcset]="HERO_IMAGE_MOBILE_WEBP" />
+          <source type="image/jpg" [srcset]="HERO_IMAGE_MOBILE_JPG"/>
+          <img
+            #background
+            class="object-cover w-full h-full max-w-none aspect-[9/16]"
+            [ngSrc]="HERO_IMAGE_MOBILE_WEBP"
+            ngSrcset="200w, 400w, 600w, 800w, 1000w, 1200w, 1280w"
+            alt="4zida Pozadina"
+            width="528"
+            height="939"
+            priority />
+        </picture>
+      </div>
+    </div>
+  </section>
+</main>
 <div>{{ ok() }}</div>
