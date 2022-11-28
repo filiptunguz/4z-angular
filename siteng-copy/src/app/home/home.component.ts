@@ -15,6 +15,9 @@ import {ComparativeAdvantageComponent} from "./comparative-advantage/comparative
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
+  // TODO: implement only when you need to test detach or something else from CDRef
+  // changeDetectorRef = inject(ChangeDetectorRef);
+
   readonly HERO_IMAGE_MOBILE_WEBP = `${environment.cdnUrl}/assets/images/backgrounds/4zida-pozadina-naslovna-mob-optimized.webp`;
   readonly HERO_IMAGE_MOBILE_JPG = `${environment.cdnUrl}/assets/images/backgrounds/4zida-pozadina-naslovna-mob-optimized.jpg`;
   readonly HERO_IMAGE_DESKTOP = `${environment.cdnUrl}/assets/images/backgrounds/4zida-pozadina-naslovna.jpg`;
@@ -24,4 +27,13 @@ export class HomeComponent {
   ok() {
     console.count('Home - CD');
   }
+
+  // ngAfterViewInit() {
+    // Write here for what doesn't work detach
+    // TODO: Mobile:
+    // TODO: Search,
+    // TODO: Desktop:
+    // TODO:
+    // this.changeDetectorRef.detach();
+  // }
 }
