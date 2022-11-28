@@ -91,7 +91,7 @@ export class CarouselComponent implements AfterViewInit {
   leftNavigator: boolean = false;
   rightNavigator: boolean = true;
   firstIntersection: boolean = false;
-  paginationSlide: boolean = false;
+  stopFocusingPagination: boolean = false;
   lastTap: number = 0;
 
   options: CarouselOptions = {
@@ -243,7 +243,17 @@ export class CarouselComponent implements AfterViewInit {
       this.scrollLeft += left ? -1 * this.itemWidth : this.itemWidth;
     } else if (1 - this.scrollLeft / maxScroll < 0.01 && this.scrollLeft !== 0) {
       if (this.breakPointOptions.loop) {
-        this.scrollLeft = left ? this.scrollLeft + -1 * this.itemWidth : 0;
+        if (left) {
+          this.scrollLeft = this.scrollLeft + -1 * this.itemWidth;
+        } else {
+          this.scrollLeft = 0;
+          this.stopFocusingPagination = true;
+          this.zone.runOutsideAngular(() => {
+            setTimeout(() => {
+              this.stopFocusingPagination = false;
+            }, this.SCROLL_ANIMATION_DURATION);
+          });
+        }
       } else if (left) {
         this.scrollLeft = this.scrollLeft + -1 * this.itemWidth;
       }
@@ -331,12 +341,12 @@ export class CarouselComponent implements AfterViewInit {
     if (this.focusItem !== index) {
       const item = this.carouselItems.find((el, i) => index === i);
       this.carousel.nativeElement.scrollLeft = item?.nativeElement.offsetLeft;
-      this.paginationSlide = true;
+      this.stopFocusingPagination = true;
 
       // While scrolling animation
       this.zone.runOutsideAngular(() => {
         setTimeout(() => {
-          this.paginationSlide = false;
+          this.stopFocusingPagination = false;
         }, this.SCROLL_ANIMATION_DURATION);
       });
       this.focusPaginationItem(index);
@@ -387,7 +397,7 @@ export class CarouselComponent implements AfterViewInit {
         // }
 
         // For scrolling pagination focus
-        if (!this.paginationSlide) {
+        if (!this.stopFocusingPagination) {
           // Detect first and last element
           const firstElement = this.visibleElements[0];
           const lastElement = this.visibleElements[1] - 1;
