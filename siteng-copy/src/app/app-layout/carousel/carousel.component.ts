@@ -412,7 +412,7 @@ export class CarouselComponent implements AfterViewInit {
 
         // For navigation
         // The idea is to detect changes only when it is really needed
-        if (this.breakPointOptions.navigation && !this.breakPointOptions.loop) {
+        if (this.breakPointOptions.navigation?.navigation && !this.breakPointOptions.loop) {
           if (this.firstIntersection) {
             if ((i > 0 && !this.leftNavigator) || (i === 0 && this.leftNavigator)) {
               this.leftNavigator = !this.leftNavigator;
