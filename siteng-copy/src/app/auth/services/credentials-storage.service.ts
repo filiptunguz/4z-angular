@@ -11,8 +11,8 @@ export interface CredentialsStorageInterface {
   // getApiKey(): string | undefined;
   //
   // getExitImpersonationLink(): string;
-  //
-  // getImpersonatedEmail(): string | undefined;
+
+  getImpersonatedEmail(): string | undefined;
 
   hasApiKey(): boolean;
   //
@@ -30,7 +30,7 @@ export interface CredentialsStorageInterface {
 })
 export class CredentialsStorageService {
   private static readonly API_KEY_LABEL = 'user-api-key';
-  // private static readonly IMPERSONATED_EMAIL_LABEL = 'impersonated-user-email';
+  private static readonly IMPERSONATED_EMAIL_LABEL = 'impersonated-user-email';
   // private static readonly DEVICE_ID_LABEL = 'device-id';
 
   private cookies = inject(CookieService);
@@ -42,11 +42,11 @@ export class CredentialsStorageService {
   //   this.cookies.remove(CredentialsStorageService.API_KEY_LABEL, cookieOptions);
   //   this.cookies.remove(CredentialsStorageService.IMPERSONATED_EMAIL_LABEL, cookieOptions);
   // }
-  //
-  // getApiKey(): string | undefined {
-  //   return this.cookies.get(CredentialsStorageService.API_KEY_LABEL);
-  // }
-  //
+
+  getApiKey(): string | undefined {
+    return this.cookies.get(CredentialsStorageService.API_KEY_LABEL);
+  }
+
   // setApiKey(value: string) {
   //   this.cookies.put(
   //     CredentialsStorageService.API_KEY_LABEL,
@@ -76,18 +76,18 @@ export class CredentialsStorageService {
   //   return `https://api.4zida.rs/v6/users/psk/_exit?api_key=${this.getApiKey()}`;
   // }
   //
-  // getImpersonatedEmail(): string | undefined {
-  //   return this.cookies.get(CredentialsStorageService.IMPERSONATED_EMAIL_LABEL);
-  // }
+  getImpersonatedEmail(): string | undefined {
+    return this.cookies.get(CredentialsStorageService.IMPERSONATED_EMAIL_LABEL);
+  }
 
   hasApiKey(): boolean {
     return this.cookies.hasKey(CredentialsStorageService.API_KEY_LABEL);
   }
 
-  // hasImpersonatedEmail(): boolean {
-  //   return this.cookies.hasKey(CredentialsStorageService.IMPERSONATED_EMAIL_LABEL);
-  // }
-  //
+  hasImpersonatedEmail(): boolean {
+    return this.cookies.hasKey(CredentialsStorageService.IMPERSONATED_EMAIL_LABEL);
+  }
+
   // private static getCookieOptions(expires: 'max' | null = null): CookieOptions {
   //   const exp = new Date();
   //
