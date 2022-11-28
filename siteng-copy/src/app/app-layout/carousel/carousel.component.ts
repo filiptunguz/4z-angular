@@ -78,6 +78,8 @@ export class CarouselComponent implements AfterViewInit {
   twinSlideService = inject(TwinSlideService);
   zone = inject(NgZone);
 
+  private readonly SCROLL_ANIMATION_DURATION = 600;
+
   itemWidth: number = 0;
   prevBreakpoint: number = 0;
   nextBreakpoint: number = 0;
@@ -165,9 +167,11 @@ export class CarouselComponent implements AfterViewInit {
 
     // AutoSlide
     if (this.breakPointOptions.auto!.auto) {
-      interval(this.breakPointOptions.auto!.delay).subscribe(() =>
-        this.slide(this.breakPointOptions.auto!.reverse || false)
-      );
+      this.zone.runOutsideAngular(() => {
+        interval(this.breakPointOptions.auto!.delay).subscribe(() =>
+          this.slide(this.breakPointOptions.auto!.reverse || false)
+        );
+      });
     }
 
     // For twin sliding
@@ -330,9 +334,11 @@ export class CarouselComponent implements AfterViewInit {
       this.paginationSlide = true;
 
       // While scrolling animation
-      setTimeout(() => {
-        this.paginationSlide = false;
-      }, 600);
+      this.zone.runOutsideAngular(() => {
+        setTimeout(() => {
+          this.paginationSlide = false;
+        }, this.SCROLL_ANIMATION_DURATION);
+      });
       this.focusPaginationItem(index);
     }
   }
