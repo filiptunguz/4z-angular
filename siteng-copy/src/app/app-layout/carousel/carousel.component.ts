@@ -530,7 +530,6 @@ export class CarouselComponent implements AfterViewInit {
 
   detectChanges() {
     this.changeDetectorRef.detectChanges();
-    console.log('detect changes');
   }
 
   get maxPaginationItems() {
