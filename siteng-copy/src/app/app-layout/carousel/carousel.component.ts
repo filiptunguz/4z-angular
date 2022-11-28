@@ -214,13 +214,12 @@ export class CarouselComponent implements AfterViewInit {
     }
 
     // Detect changes for all properties that depends on navigationReady
-    if (this.breakPointOptions.navigation) {
+    if (this.breakPointOptions.navigation?.navigation) {
       this.navigationReady = true;
       this.detectChanges();
     }
 
     this.init.emit();
-    this.changeDetectorRef.detach();
   }
 
   slide(left: boolean) {
@@ -515,6 +514,7 @@ export class CarouselComponent implements AfterViewInit {
 
   detectChanges() {
     this.changeDetectorRef.detectChanges();
+    console.log('detect changes');
   }
 
   get maxPaginationItems() {
